@@ -1,3 +1,6 @@
+// TODO: Reference external expression globals when available
+// /// <reference types="../(utils)/node_modules/expression-globals-typescript/src" />
+
 type Points = Vector2D[];
 type Vector2D = [number, number];
 type Vector3D = [number, number, number];
@@ -6,6 +9,25 @@ type Color = [number, number, number, number];
 interface PathValue {
 }
 type SourceData = any[];
+
+/**
+ * @global
+ * Represents the current composition. Available in expressions.
+ */
+declare var thisComp: Comp;
+
+/**
+ * @global
+ * Represents the current layer. Available in expressions.
+ */
+declare var thisLayer: Layer;
+
+/**
+ * @global
+ * Represents the current property being evaluated. Available in expressions.
+ */
+declare var thisProperty: Property<Value>;
+
 /**
  * Keyframe objects, which can be accessed via the property method `property.key()`
  */
