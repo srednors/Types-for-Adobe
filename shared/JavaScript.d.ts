@@ -601,6 +601,10 @@ interface DateConstructor {
     sec?: number,
     ms?: number,
   ): Date
+  /**
+   * The now() method returns the number of milliseconds that have passed since midnight January 1, 1970 UTC.
+   */
+  now(): number
 }
 declare const Date: DateConstructor
 
@@ -1004,7 +1008,7 @@ interface String {
    * Those values are concatenated with the original string, the result is returned. The original string is not effected.Returns the concatenated string.
    * @param value The values to be concatenated with the given string.
    */
-  concat(value: string): string
+  concat(...value: any[]): string
 
   /**
    * Returns a string consisting of this string enclosed in a <tt> tag.
@@ -1093,7 +1097,7 @@ interface String {
    * @param delimiter Specifies the string to use for delimiting. If delimiter is omitted, the array returned contains one element, consisting of the entire string.
    * @param limit
    */
-  split(delimiter: string, limit?: number): string[]
+  split(delimiter: string | RegExp, limit?: number): string[]
 
   /**
    * Returns a string consisting of this string enclosed in a <strike> tag.
@@ -1499,7 +1503,9 @@ interface FileConstructor {
    * @param filter A filter that limits the types of files displayed in the dialog. In Windows,a filter expression such as "Javascript files:*.jsx;All files:*.*". In Mac OS, a filter function that takes a File instance and returns true if the file should be included in the display, false if it should not.
    * @param multiSelect When true, the user can select multiple files and the return value is an array.
    */
-  openDialog(prompt?: string, filter?: any, multiSelect?: boolean): File
+  openDialog(prompt?: string, filter?: string | Function, multiSelect?: boolean): File | File[]
+  openDialog(prompt: string, filter: string | Function, multiSelect: false): File
+  openDialog(prompt: string, filter: string | Function, multiSelect: true): File[]
 
   /**
    * Opens a dialog so the user can select a file name to save to.
@@ -1689,7 +1695,9 @@ interface File {
    * @param filter A filter that limits the types of files displayed in the dialog. In Windows,a filter expression such as "Javascript files:*.jsx;All files:*.*". In Mac OS, a filter function that takes a File instance and returns true if the file should be included in the display, false if it should not.
    * @param multiSelect When true, the user can select multiple files and the return value is an array.
    */
-  openDlg(prompt?: string, filter?: any, multiSelect?: boolean): File
+  openDlg(prompt?: string, filter?: string | Function, multiSelect?: boolean): File | File[]
+  openDlg(prompt: string, filter: string | Function, multiSelect: false): File
+  openDlg(prompt: string, filter: string | Function, multiSelect: true): File[]
 
   /**
    * Reads the contents of the file, starting at the current position.
@@ -2620,6 +2628,55 @@ interface XML {
  */
 interface XMLList {}
 declare const XMLList: XMLList
+type UnitNameAbbrev =
+  | "in"
+  | "ft"
+  | "yd"
+  | "mi"
+  | "mm"
+  | "cm"
+  | "m"
+  | "km"
+  | "pt"
+  | "pc"
+  | "tpt"
+  | "tpc"
+  | "ci"
+  | "px"
+  | "%"
+
+type UnitName =
+  | UnitNameAbbrev
+  | "inch"
+  | "inches"
+  | "foot"
+  | "feet"
+  | "yard"
+  | "yards"
+  | "mile"
+  | "miles"
+  | "millimeter"
+  | "millimeters"
+  | "centimeter"
+  | "centimeters"
+  | "meter"
+  | "meters"
+  | "kilometer"
+  | "kilometers"
+  | "point"
+  | "points"
+  | "pica"
+  | "picas"
+  | "traditional point"
+  | "traditional points"
+  | "traditional pica"
+  | "traditional picas"
+  | "cicero"
+  | "ciceros"
+  | "pixel"
+  | "pixels"
+  | "percent"
+  | "percent"
 
 interface UnitValueConstructor {
   readonly prototype: UnitValue
@@ -2627,8 +2684,8 @@ interface UnitValueConstructor {
   /**
    * Creates a new UnitValue object.
    */
-  new (value: string | UnitValue): UnitValue
-  (value: string | UnitValue): UnitValue
+  new (value: string | number | UnitValue, unitName?: UnitName): UnitValue
+  (value: string | number | UnitValue, unitName?: UnitName): UnitValue
 
   /**
    * The base unit for all conversions.
@@ -2650,7 +2707,7 @@ interface UnitValue {
   /**
    * The unit name.
    */
-  readonly type: string
+  readonly type: UnitNameAbbrev | "?"
 
   /**
    * The numeric value.
@@ -2661,25 +2718,21 @@ interface UnitValue {
    * Returns this instance as a different unit.
    * @param unitName The unit name.
    */
-  as(unitName: string): UnitValue
+  as(unitName: UnitNameAbbrev): UnitValue
 
   /**
    * Converts this instance to a different unit.
    * @param unitName The unit name.
    */
-  convert(unitName: string): any
+  convert(unitName: UnitNameAbbrev): boolean
 }
 
 /**
  * Only for TypeScript compatibility
  */
-interface CallableFunction extends Function {
+interface CallableFunction extends Function {}
 
-}
-
-interface NewableFunction extends Function {
-
-}
+interface NewableFunction extends Function {}
 
 interface IArguments {
   [index: number]: any
