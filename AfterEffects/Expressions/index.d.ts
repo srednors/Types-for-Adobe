@@ -1,5 +1,6 @@
 // TODO: Reference external expression globals when available
 // /// <reference types="../(utils)/node_modules/expression-globals-typescript/src" />
+/// <reference path="../../shared/JavaScript.d.ts" />
 
 type Points = Vector2D[];
 type Vector2D = [number, number];
