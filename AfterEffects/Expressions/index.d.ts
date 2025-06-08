@@ -1,5 +1,3 @@
-// TODO: Reference external expression globals when available
-// /// <reference types="../(utils)/node_modules/expression-globals-typescript/src" />
 /// <reference path="../../shared/JavaScript.d.ts" />
 
 type Points = Vector2D[];
@@ -28,6 +26,27 @@ declare var thisLayer: Layer;
  * Represents the current property being evaluated. Available in expressions.
  */
 declare var thisProperty: Property<Value>;
+
+/**
+ * @global
+ * The Amount value of the text selector property. Available in text layer expression selector properties.
+ * By default, it is set to [100, 100, 100].
+ */
+declare var selectorValue: Vector3D;
+
+/**
+ * @global
+ * An index number assigned to each character, word or line in the text layer (depending on what the "Based On" property is set to).
+ * Available in text layer expression selector properties.
+ */
+declare var textIndex: number;
+
+/**
+ * @global
+ * The total number of characters, words, or lines in the text layer (depending on what the "Based On" property is set to).
+ * Available in text layer expression selector properties.
+ */
+declare var textTotal: number;
 
 /**
  * Keyframe objects, which can be accessed via the property method `property.key()`
